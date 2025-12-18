@@ -67,21 +67,6 @@ jobs:
             aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY --profile default
             aws configure set aws_session_token $AWS_SESSION_TOKEN --profile default
             aws configure set region $AWS_REGION --profile default
-      # Send secrets from CircleCI to Elastic Beanstalk
-      - run:
-          name: Set Elastic Beanstalk Environment Variables
-          command: |
-            aws elasticbeanstalk update-environment \
-              --environment-name Udacity-udagram-api-env \
-              --option-settings \
-                Namespace=aws:elasticbeanstalk:application:environment,OptionName=POSTGRES_USERNAME,Value=$POSTGRES_USERNAME \
-                Namespace=aws:elasticbeanstalk:application:environment,OptionName=POSTGRES_PASSWORD,Value=$POSTGRES_PASSWORD \
-                Namespace=aws:elasticbeanstalk:application:environment,OptionName=POSTGRES_DB,Value=$POSTGRES_DB \
-                Namespace=aws:elasticbeanstalk:application:environment,OptionName=POSTGRES_HOST,Value=$POSTGRES_HOST \
-                Namespace=aws:elasticbeanstalk:application:environment,OptionName=JWT_SECRET,Value=$JWT_SECRET \
-              --profile default
-
-            aws elasticbeanstalk wait environment-updated --application-name demo-app --environment-names Udacity-udagram-api-env --profile default
       - run:
           name: Deploy App
           # Install, build, deploy in both apps
